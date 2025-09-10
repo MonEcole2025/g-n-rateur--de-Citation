@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Citations Inspirantes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #6e8efb;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .quote-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .quote-text {
+            font-size: 1.8rem;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+            font-style: italic;
+            transition: opacity 0.3s ease;
+        }
+
+        .quote-author {
+            font-size: 1.3rem;
+            color: #6e8efb;
+            font-weight: bold;
+        }
+
+        .generate-btn {
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+            margin: 10px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(110, 142, 251, 0.6);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .share-btn {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+            margin: 10px;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.6);
+        }
+
+        .wisdom-badge {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #ff6b8b;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(225, 107, 107, 0.4);
+            animation: pulse 2s infinite;
+            font-size: 1.5rem;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .quote-text {
+                font-size: 1.4rem;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Générateur de Citations</h1>
+        <p class="subtitle">Des paroles sages pour votre journée</p>
+        
+        <div class="quote-container">
+            <div class="wisdom-badge">✨</div>
+            <p id="quote-text" class="quote-text">Cliquez sur le bouton pour générer une citation inspirantes</p>
+            <p id="quote-author" class="quote-author"></p>
+        </div>
+        
+        <div class="buttons-container">
+            <button id="generate-btn" class="generate-btn">Nouvelle Citation</button>
+            <button id="share-btn" class="share-btn">Partager</button>
+        </div>
+        
+        <p class="footer">Chaque citation est unique et spéciale, comme vous!</p>
+    </div>
+    
+    <script>
+        const quotes = [
+            {
+                text: "Le code est comme l'humour. Quand il faut l'expliquer, c'est qu'il n'est pas bon.",
+                author: "Maître Cory House"
+            },
+            {
+                text: "Écrire du code propre est comme peindre un tableau. Chaque coup de pinceau a son importance.",
+                author: "Maître Robert C.Martin"
+            },
+            {
+                text: "L'humanité ne peut rien obtenir sans faire de sacrifice en retour. Pour obtenir quelque chose, une chose de valeur égale doit être perdue.",
+                author: "L'Échange Équivalent-Fullmetal Alchemist"
+            },
+            {
+                text: "Ce monde est cruel et impitoyable... mais il est aussi très beau.",
+                author: "Mikasa Ackerman-L'attaque des Titans"
+            },
+            {
+                text: "La peur n'est pas le mal. Elle te montre ta faiblesse. Et une fois que tu connais ta faiblesse, tu peux devenir plus fort, et aussi plus gentil.",
+                author: "Gildarts elive-Fairy Tail"
+            },
+            {
+                text: "La défaite n'est pas une honte. Ne pas se relever, Ça, C'est une honte.",
+                author: "Shintaro Midorima-Kuroko's Basketball"
+            },
+            {
+                text: "Si vous n'aimez pas votre destin, ne l'acceptez pas.",
+                author: "Naruto Uzumaki-Naruto"
+            },
+            {
+                text: "Un bon développeur est un développeur paresseux. Il trouve toujours la solution la plus simple.",
+                author: "Maître Bill Gates"
+            },
+            {
+                text: "Les gens deviennent plus forts parce qu'ils ont des souvenirs qu'ils ne peuvent pas oublier.",
+                author: "Tsunade-Naruto"
+            },
+            {
+                text: "Un programme n'est jamais sans bug, il est juste dans un état oû les bugs sont acceptables.",
+                author: "Maître Jean Dupont"
+            },
+            {
+                text: "La vie, c'est comme une boîte de chocolats, on ne sait jamais sur quoi on va tomber.",
+                author: "Forrest Gump"
+            },
+            {
+                text: "Le plus important ce n'est pas de tomber, c'est de se relever.",
+                author: "Proverbe célèbre"
+            },
+            {
+                text: "Le meilleur moyen de ne pas être déçus, c'est de se préparer à la deception.",
+                author: "Gwen-Spider-Man:New Generation"
+            },
+            {
+                text: "Le monde n'est pas parfait. Mais il est là pour nous, faisant de son mieux... et c'est ce qui le rend si incroyablement beau.",
+                author: "Roy Mustang-Fullmetal Alchemist"
+            },
+            {
+                text: "Il n'ya pas de justice dans le monde des ninjas. Nous nous battons en croyant en notre propre justice. Mais si l'ennemi fait la même chose qui a raison ?.",
+                author: "Shisui Uchiha-Naruto"
+            },
+            {
+                text: "Si tu commences à regretter, tu va émousser tes décisions futures et laisser les autres faire tes choix à ta place. Il ne te restera plus qu'à mourir.",
+                author: "Erwin Smith-L'attaque des Titans"
+            },                
+        ];
+        
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+        const generateBtn = document.getElementById('generate-btn');
+        const shareBtn = document.getElementById('share-btn');
+
+        function getRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            return quotes[randomIndex];
+        }
+        
+        function displayRandomQuote() {
+            // Effet de fondu
+            quoteText.style.opacity = 0;
+            quoteAuthor.style.opacity = 0;
+
+            setTimeout(() => {
+                const quote = getRandomQuote();
+                quoteText.textContent = quote.text;
+                quoteAuthor.textContent = quote.author;
+
+                // Réapparition en fondu
+                quoteText.style.opacity = 1;
+                quoteAuthor.style.opacity = 1;
+            }, 300);
+        }
+        
+        function shareQuote() {
+            const currentQuote = quoteText.textContent;
+            const currentAuthor = quoteAuthor.textContent;
+            const shareText = `${currentQuote} - ${currentAuthor}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Citation Inspirante',
+                    text: shareText,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                // Fallback pour copier dans le presse-papier
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('Citation copiée dans le presse-papier !');
+                }).catch(err => {
+                    console.error('Erreur lors de la copie : ', err);
+                    prompt('Copiez cette citation :', shareText);
+                });
+            }
+        }
+
+        generateBtn.addEventListener('click', displayRandomQuote);
+        shareBtn.addEventListener('click', shareQuote);
+
+        // Afficher une citation au chargement initial
+        displayRandomQuote();
+    </script>
+</body>
+</html>        
+        
+        
